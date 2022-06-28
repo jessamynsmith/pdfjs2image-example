@@ -122,6 +122,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'pdfjs2image_example' / 'static'
 ]
 
+MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
 # Default primary key field type

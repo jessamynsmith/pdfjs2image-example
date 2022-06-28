@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}PDF2Image{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.min.js" 
+        integrity="sha512-g4FwCPWM/fZB1Eie86ZwKjOP+yBIxSBM/b2gQAiSVqCgkyvZ0XxYPDEcN2qqaKKEvK6a05+IPL1raO96RrhYDQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.worker.min.js" 
+        integrity="sha512-QVzIOQH0mGpLAOwHfVSOGsVjh4UGon7+hQwoqIUHbTMvcyS76Ee3AUDep58mU2TvdkPgzZ4aQqxbZ0v2wsyvpA==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
 
 {% block content %}
 <h3>PDFs</h3>
@@ -20,15 +31,22 @@
 {% for obj in object_list %}
     <tr>
         <td>
-            {{ obj.image }}
+            <img src="{{ obj.image }}">
+            {% if not obj.image %}
+            <button data-pdf-thumbnail-file="{{ obj.pdf.url }}" data-pdf-thumbnail-width="100">
+                create thumbnail
+            </button>
+            {% endif %}
         </td>
         <td>
             {{ obj.name }}
         </td>
         <td>
-            {{ obj.pdf }}
+            <a href="{{ obj.pdf.url }}">{{ obj.pdf }}</a>
         </td>
     </tr>
 {% endfor %}
 </table>
+
+<script src="{% static 'js/create_thumbnails.js' %}"></script>
 {% endblock %}
