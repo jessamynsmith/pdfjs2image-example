@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}PDF2Image{% endblock %}
+
+{% block content %}
+<h3>PDFs</h3>
+{% for entry in blog_entries %}
+    <h2>{{ entry.title }}</h2>
+    <p>{{ entry.body }}</p>
+{% endfor %}
+{% endblock %}
