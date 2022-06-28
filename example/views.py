@@ -1,5 +1,8 @@
-from django.views.generic import TemplateView
+from django.views.generic import ListView
+
+from example import models
 
 
-class HomeView(TemplateView):
-    template_name = 'example/home.html'
+class ContentListView(ListView):
+    model = models.Content
+    # template_name = 'example/content_list.html'
