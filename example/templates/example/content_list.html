@@ -35,13 +35,17 @@
     </tr>
 {% for obj in object_list %}
     <tr>
-        <td>
+        <td class="row" data-has-image="{{ obj.image|yesno:"true,false," }}">
             <img src="{% if obj.image %}{{ obj.image.url }}{% endif %}">
-            {% if not obj.image %}
-            <button data-id="{{ obj.id }}" data-pdf-thumbnail-file="{{ obj.pdf.url }}" data-pdf-thumbnail-width="100">
+            <br>
+            <button class="delete-button" data-id="{{ obj.id }}">
+                delete thumbnail
+            </button>
+            <br>
+            <button class="create-button" data-id="{{ obj.id }}"
+                    data-pdf-thumbnail-file="{{ obj.pdf.url }}" data-pdf-thumbnail-width="100">
                 create thumbnail
             </button>
-            {% endif %}
         </td>
         <td>
             {{ obj.name }}

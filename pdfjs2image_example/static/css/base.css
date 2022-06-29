@@ -10,3 +10,7 @@ th, td {
     border: 1px darkgrey solid;
     padding: 10px;
 }
+
+.hidden {
+    display: none;
+}

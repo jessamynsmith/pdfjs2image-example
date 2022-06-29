@@ -8,7 +8,11 @@
 
 let uploadImage = (id, imageData) => {
     const formData = new FormData();
-    formData.append('image', imageData, `image_${id}.png`);
+    if (imageData) {
+        formData.append('image', imageData, `image_${id}.png`);
+    } else {
+        formData.append('image', '');
+    }
 
     const options = {
       method: 'PATCH',
@@ -18,8 +22,7 @@ let uploadImage = (id, imageData) => {
       }
     };
     
-    fetch(`/api/v1/content/${id}/`, options);
-    
+    return fetch(`/api/v1/content/${id}/`, options);
 };
 
 var worker = null;
@@ -60,9 +63,10 @@ var createPDFThumbnail = function(event) {
                 let imageElement = parent.querySelector('img');
                 imageElement.src = canvas.toDataURL();
                 canvas.toBlob((blob) => {
-                    uploadImage(element.getAttribute('data-id'), blob);
+                    uploadImage(element.getAttribute('data-id'), blob).then((response) => {
+                        window.location.reload();
+                    });
                 });
-                element.remove();
             });
         }).catch(function() {
             console.log("pdfThumbnails error: could not open page 1 of document " + filePath + ". Not a pdf ?");
@@ -74,10 +78,42 @@ var createPDFThumbnail = function(event) {
 };
 
 
+let deletePDFThumbnail = (event) => {
+    event.preventDefault();
+    
+    let element = event.currentTarget;
+    let parent = element.closest('td');
+    let imageElement = parent.querySelector('img');
+    let id = element.getAttribute('data-id');
+    
+    uploadImage(id, '').then((response) => {
+        imageElement.src = '';
+        // toggleButtons(parent, false);
+        window.location.reload();
+    });
+};
+
+
+let toggleButtons = (element, hasImage) => {
+    let deleteButton = element.querySelector('button[class="delete-button"]');
+    let createButton = element.querySelector('button[class="create-button"]');
+    if (hasImage === 'true') {
+        createButton.classList.add('hidden');
+        deleteButton.classList.remove('hidden');
+        deleteButton.addEventListener('click', deletePDFThumbnail);
+    } else {
+        deleteButton.classList.add('hidden');
+        createButton.classList.remove('hidden');
+        createButton.addEventListener('click', createPDFThumbnail);
+    }
+};
+
+
 document.addEventListener("DOMContentLoaded", function() {
-    var nodesArray = Array.prototype.slice.call(document.querySelectorAll('button[data-pdf-thumbnail-file]'));
+    let nodesArray = Array.prototype.slice.call(document.querySelectorAll('td[class="row"]'));
     for (let i = 0; i < nodesArray.length; i++) {
-        nodesArray[i].addEventListener('click', createPDFThumbnail);
+        let hasImage = nodesArray[i].getAttribute('data-has-image');
+        toggleButtons(nodesArray[i], hasImage);
     }
 });
 
