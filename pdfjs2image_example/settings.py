@@ -54,7 +54,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'pdfjs2image_example.urls'
 
-print(BASE_DIR)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
