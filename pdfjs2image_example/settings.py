@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-*iwfj6ljg+(u1u1qho%99%+f&*%p!7$$z1ld*$rwu31q_9(hhd
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     'jessamynsmith.pythonanywhere.com'
 ]
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'example',
 ]
 

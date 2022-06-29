@@ -6,9 +6,26 @@
  * then set it as the img src.
  */
 
+let uploadImage = (id, imageData) => {
+    const formData = new FormData();
+    formData.append('image', imageData, `image_${id}.png`);
+
+    const options = {
+      method: 'PATCH',
+      body: formData,
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      }
+    };
+    
+    fetch(`/api/v1/content/${id}/`, options);
+    
+};
+
 var worker = null;
     
 var createPDFThumbnail = function(event) {
+    event.preventDefault();
     let element = event.currentTarget;
     console.log('createPDFThumbnail', element)
 
@@ -42,6 +59,9 @@ var createPDFThumbnail = function(event) {
                 let parent = element.closest('td');
                 let imageElement = parent.querySelector('img');
                 imageElement.src = canvas.toDataURL();
+                canvas.toBlob((blob) => {
+                    uploadImage(element.getAttribute('data-id'), blob);
+                });
                 element.remove();
             });
         }).catch(function() {
